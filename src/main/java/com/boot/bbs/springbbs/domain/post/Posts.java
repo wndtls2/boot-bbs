@@ -10,7 +10,6 @@ import javax.persistence.*;
 @NoArgsConstructor
 @Entity
 public class Posts {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -30,5 +29,9 @@ public class Posts {
         this.author = author;
     }
 
+    public void update(String title, String content){
+        this.title = title;
+        this.content = content;
+    }
 
 }

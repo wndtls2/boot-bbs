@@ -1,26 +1,29 @@
 package com.boot.bbs.springbbs.post;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import com.boot.bbs.springbbs.domain.post.Posts;
 import com.boot.bbs.springbbs.domain.post.PostsRepository;
-import org.aspectj.lang.annotation.After;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.assertj.core.api.Assertions;
+import org.junit.After;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
-@ExtendWith(SpringExtension.class)
+
+
+@RunWith(SpringRunner.class)
 @SpringBootTest
 public class PostsRepositoryTest {
 
     @Autowired
     PostsRepository postsRepository;
 
-    @AfterEach
+    @After
     public void cleanup() {
         postsRepository.deleteAll();
     }
@@ -42,8 +45,31 @@ public class PostsRepositoryTest {
 
         //then
         Posts posts = postsList.get(0);
-        Assertions.assertEquals(posts.getTitle(),title);
-        Assertions.assertEquals(posts.getContent(),content);
+        assertThat(posts.getTitle()).isEqualTo(title);
+        assertThat(posts.getContent()).isEqualTo(content);
+
+    }
+
+    @Test
+    public void BaseTimeEntity_reg(){
+        //given
+        LocalDateTime now = LocalDateTime.of(2021,5,1,0,0);
+        postsRepository.save(Posts.builder()
+                        .title("title")
+                        .content("content1")
+                        .build());
+
+        //when
+        List<Posts> list = postsRepository.findAll();
+
+        //then
+        Posts posts = list.get(0);
+        System.out.println(">>>>>>>>>> createDT" + posts.getCreateDate());
+        System.out.println(">>>>>>>>>> modiDT" + posts.getModifiedDate());
+
+        assertThat(posts.getCreateDate()).isAfter(now);
+        assertThat(posts.getModifiedDate()).isAfter(now);
+
     }
 
 }

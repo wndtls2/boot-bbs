@@ -1,0 +1,50 @@
+{{>layout/header}}
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form name="saveForm">
+            <input name="title" />
+            <input name="author" />
+            <textarea name="content" id="content" rows="10" cols="80">
+                This is my textarea to be replaced with CKEditor 4.
+            </textarea>
+
+        </form>
+        <button class="btn-primary" onclick="to_ajax()"> btn</button>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+</div>
+<script>
+    $(function() {
+        console.log( "ready!" );
+        CKEDITOR.replace( 'content' );
+    });
+
+    function to_ajax(){
+
+        let queryString = {
+            title : $('input[name=title]').val(),
+            content : $('textarea[name=content]').val(),
+            author : $('input[name=author]').val()
+        };
+
+        console.log(queryString);
+
+        $.ajax({
+            type : 'post',
+            url : '/api/v1/posts',
+            dataType : 'json',
+            contentType: 'application/json',
+            data : JSON.stringify(queryString),
+            error: function(xhr, status, error){
+                console.log(xhr,status, error);
+            },
+            success : function(json){
+                console.log(json)
+            },
+        });
+    }
+</script>
+{{>layout/footer}}

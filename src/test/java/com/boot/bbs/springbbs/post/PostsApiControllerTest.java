@@ -67,6 +67,7 @@ public class PostsApiControllerTest {
 
     @Test
     public void posts_modify(){
+
         //given
         Posts savedPosts = postsRepository.save(Posts.builder()
                                                      .title("title")
@@ -95,6 +96,7 @@ public class PostsApiControllerTest {
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
-    }
 
+
+    }
 }
